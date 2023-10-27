@@ -20,4 +20,14 @@ public class Teclado {
 
     return ret;
   }
+
+  public static String getUmString() throws Exception {
+    String ret = null;
+    try{
+      ret = teclado.readLine();
+    } catch (Exception erro){
+
+    }
+    return ret;
+  }
 }

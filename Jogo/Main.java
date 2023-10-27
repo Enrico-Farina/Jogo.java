@@ -1,49 +1,65 @@
 import java.util.Random;
+import java.lang.Math;
+import java.lang.Thread;
 
 public class Main {
 
-  public static void main (String[] args) {
-    Random random = new Random();
+  public static void main (String[] args) throws Exception {
+    //Cont round
+    Integer round = 0;
     
+    //Create the players 
     Jogador[] jogadores = new Jogador[2];
 
-    Jogador jogador1 = new Jogador();
-    Jogador jogador2 = new Jogador();
+    System.out.print("Digite o nome do primeiro jogador: ");
+    jogadores[0] = new Jogador(Teclado.getUmString() , 1);
+    System.out.print("Digite o nome do segundo jogador: ");
+    jogadores[1] = new Jogador(Teclado.getUmString() , 9);
 
-    jogadores[0] = jogador1;
-    jogadores[1] = jogador2;
-
-    jogadores[0].setNome("Enrico");
-    jogadores[0].setPosicao(1);
-    jogadores[1].setNome("Paras");
-    jogadores[1].setPosicao(10);
-
+    System.out.println();
+    System.out.println("------------------------");
     System.out.println ("Bem vindo ao duelo!");
     System.out.println ("Quem eliminar o adversário primeiro ganha, boa sorte!");
-    Integer j = 0;
 
+    Integer action = 0;
+    //Integer j = 0;
     try {
 
       while (jogadores[0].getVida() > 0 && jogadores[1].getVida() > 0) {
-      for (Integer i = 0; i <= 1; i++){
+        round++;
+        if (round == 3) //spawnHeart();
+      for (Integer i = 0 , j = 1; i <= 1; i++ , j--){
+        //i define the atual player
         //j define the another player
-        if (i == 0) j = 1; else j = 0;
+        
         //setValidar initialize the validate action to be check 
         jogadores[i].setValidar(false);
 
         do {
-          System.out.println("------------------------");
-          System.out.println(jogadores[i].getNome());
-          System.out.println("Vida atual: " + jogadores[i].getVida());
-          System.out.println("Posição atual: " + jogadores[i].getPosicao());
 
-          if (jogadores[i].selectAction() == 1){
-            //gunShot
-          } else {
-            jogadores[i].movePlayer(jogadores[i] , jogadores[j].getPosicao());
-          }
+          jogadores[i].atualScreen(jogadores[j].getPosicao());
+          action = jogadores[i].selectAction();
+      
+
+          if (action == 1){
+            jogadores[i].gunShot(jogadores[j]);
+          } else if (action == 2) {
+            jogadores[i].movePlayer(jogadores[j].getPosicao());
+          } else if (action == 9){
+            jogadores[i].setValidar(true);
+             System.out.println(jogadores[i].getNome() + " Desistiu.");
+             jogadores[i].setVida(0);
+            }
+          
         } while (jogadores[i].getValidar() == false);
       }
+    }
+
+    System.out.println();
+    if (jogadores[0].getVida() == 0){
+      System.out.println(jogadores[1].getNome() + " Venceu!!");
+    } else {
+      System.out.println(jogadores[0].getNome() + " Venceu!!");
     }
 
     } catch (Exception erro) {
